@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>eventBus简易实现</title>
+  </head>
+  <body>
+    <script src="index.js"></script>
+    <script>
+      const bus = new EventBus();
+      bus.on("test", () => {
+        console.log("--->监听测试事件<---");
+      });
+      bus.on("test", (...args) => {
+        console.log("--->接受测试事件参数：", ...args);
+      });
+      bus.once("test", () => {
+        console.log("--->监听一次测试事件<---");
+      });
+      class Test {
+        constructor() {
+          this.name = "Test类开发";
+          this.cb = () => {
+            this.test();
+          };
+          bus.on("test", this.cb);
+        }
+        off() {
+          bus.off("test", this.cb);
+        }
+        test() {
+          console.log("--->Test类监听<---", this.name);
+        }
+      }
+      const t = new Test();
+      bus.emit("test", "hello world");
+    </script>
+  </body>
+</html>
